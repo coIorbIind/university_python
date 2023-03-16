@@ -1,4 +1,5 @@
 import struct
+import sys
 
 
 def f_func(item):
@@ -36,7 +37,7 @@ def encrypt(message: str):
     arr_of_64bit_numbers = []
     str_bites = message.encode('utf-8')
     for i in range((len(str_bites) + 7) // 8):
-        arr_of_64bit_numbers.append(struct.unpack('Q', (str_bites[i * 8:(i + 1) * 8]).ljust(8, b'\0'))[0])
+        arr_of_64bit_numbers.append(int.from_bytes(str_bites[i * 8:(i + 1) * 8], byteorder=sys.byteorder))
 
     encr = []
     for i in arr_of_64bit_numbers:
@@ -51,6 +52,7 @@ def decrypt(encr_message) -> str:
 
     decrypt_mes = b''
     for num in decr:
+        print(num)
         decrypt_mes += (struct.pack('Q', num))
     return decrypt_mes.decode()
 
@@ -75,7 +77,7 @@ if __name__ == '__main__':
             k += 1
         P.append(FIXED_P[i] ^ long_key)
 
-    data = struct.unpack('Q', ((0 << 32) + 0).to_bytes(8, byteorder='big').ljust(8, b'\0'))[0]
+    data = 0
     for i in range(0, 18, 2):
         data = blowfish_encrypt_block(data)
         P[i] = data >> 32
