@@ -52,7 +52,6 @@ def decrypt(encr_message) -> str:
 
     decrypt_mes = b''
     for num in decr:
-        print(num)
         decrypt_mes += (struct.pack('Q', num))
     return decrypt_mes.decode()
 
